@@ -9,10 +9,21 @@ from streamlit_extras.grid import grid
 
 
 def build_sidebar():
-    st.image("images/logo-250-100-transparente.png")
-    ticker_list = pd.read_csv("tickers_ibra.csv", index_col=0)
-    tickers = st.multiselect(label="Selecione as Empresas", options=ticker_list, placeholder='Códigos')
-    tickers = [t+".SA" for t in tickers]
+
+    st.image("images/NEWLOGO.png")
+
+    
+    Ibov_ticker_list = pd.read_csv("tickers_ibra.csv", index_col=0)
+    Ibov_tickers = st.multiselect(label="IBOV", options=Ibov_ticker_list, placeholder='Empresa')
+    Ibov_tickers = [t+".SA" for t in Ibov_tickers]
+
+    ifix_ticker_list = pd.read_csv("IFIX.csv", index_col=0)
+    ifix_tickers = st.multiselect(label="IFIX", options=ifix_ticker_list, placeholder='Fundo Imobiliario')
+    ifix_tickers = [t+".SA" for t in ifix_tickers]
+
+    tickers = Ibov_tickers + ifix_tickers
+
+
     start_date = st.date_input("De", format="DD/MM/YYYY", value=datetime(2023,1,2))
     end_date = st.date_input("Até", format="DD/MM/YYYY", value="today")
 
@@ -83,6 +94,6 @@ st.set_page_config(layout="wide")
 with st.sidebar:
     tickers, prices = build_sidebar()
 
-st.title('Python para Investidores')
+st.title('🎯 Dash Risco Retorno de portifótio 🚀 [Forked from @codigoquant]' ) 
 if tickers:
     build_main(tickers, prices)
