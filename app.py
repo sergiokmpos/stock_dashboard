@@ -10,6 +10,8 @@ from streamlit_extras.grid import grid
 
 def build_sidebar():
 
+    st.header("Forked from @codigoquant")
+
     st.image("images/NEWLOGO.png")
 
     
@@ -38,20 +40,22 @@ def build_sidebar():
         return tickers, prices
     return None, None
 
+
 def build_main(tickers, prices):
     weights = np.ones(len(tickers))/len(tickers)
-    prices['portfolio'] = prices.drop("IBOV", axis=1) @ weights
+    prices['PORTFOLIO'] = prices.drop("IBOV", axis=1) @ weights
     norm_prices = 100 * prices / prices.iloc[0]
     returns = prices.pct_change()[1:]
     vols = returns.std()*np.sqrt(252)
     rets = (norm_prices.iloc[-1] - 100) / 100
+
 
     mygrid = grid(5 ,5 ,5 ,5 ,5 , 5, vertical_align="top")
     for t in prices.columns:
         c = mygrid.container(border=True)
         c.subheader(t, divider="red")
         colA, colB, colC = c.columns(3)
-        if t == "portfolio":
+        if t == "PORTFOLIO":
             colA.image("images/pie-chart-dollar-svgrepo-com.svg")
         elif t == "IBOV":
             colA.image("images/pie-chart-svgrepo-com.svg")
@@ -94,6 +98,47 @@ st.set_page_config(layout="wide")
 with st.sidebar:
     tickers, prices = build_sidebar()
 
-st.title('🎯 Dash Risco Retorno de portifótio 🚀 [Forked from @codigoquant]' ) 
+st.title('🎯 Dash Risco Retorno de portifótio 🚀' ) 
 if tickers:
     build_main(tickers, prices)
+
+
+     # ---- CONTACT ----
+    with st.container():
+         st.write("----")
+         st.header("Powered by Streamlit.")
+
+         footer="""
+         <style>
+         a:link , a:visited{
+         color: blue;
+         background-color: transparent;
+         text-decoration: underline;
+         }
+         
+         a:hover,  a:active {
+         color: red;
+         background-color: transparent;
+         text-decoration: underline;
+         }
+         
+         .footer {
+         position: fixed;
+         left: 0;
+         bottom:0;
+         width: 100%;
+         background-color: transparent;
+         color: black;
+         text-align: center;
+         overflow:auto;
+
+       
+         }
+         </style>
+         <div class="footer">
+         <p><b>Developed with Python 🐍</b><a style='display: block; text-align: center;'  href="https://www.linkedin.com/in/sergiokmpos/" target="_blank">Sergio Paiva de Campos 2024</a></p>
+         </div>
+         
+         """
+         
+         st.markdown(footer, unsafe_allow_html=True)
